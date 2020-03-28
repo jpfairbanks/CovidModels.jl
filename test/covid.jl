@@ -1,4 +1,22 @@
 module TestCovid
+using Catlab
+using Catlab.Doctrines
+using Catlab.Graphics
+using Catlab.WiringDiagrams
+using Catlab.Programs
+import Base.Multimedia: display
+import Catlab.Graphics: to_graphviz, LeftToRight
+import Base: (==), length, show
+using Test
+using Petri
+using SemanticModels.ModelTools.CategoryTheory
+import SemanticModels.ModelTools.CategoryTheory: undecorate, ⊔
+using SemanticModels.ModelTools.PetriModels
+using SemanticModels.ModelTools.PetriCospans
+import SemanticModels.ModelTools.PetriCospans: otimes_ipm, compose_pushout
+import SemanticModels.ModelTools: model
+using CovidModels
+
 
 S,E,I,R = generators(Disease)
 # draw(spontaneous(E,I)⋅spontaneous(I,R)⊗(spontaneous(E,I)))
