@@ -8,26 +8,134 @@ using Plots
 
 function makeplots_seir(sol, prefix)
     mkpath(dirname(prefix))
-    p1 = plot(sol,vars=[1,2,3,4], xlabel="", ylabel="people", linewidth=3,title="Cities", legend=false)
-    p2 = plot(sol,vars=[5,6,7,8], xlabel="", ylabel="people", linewidth=3, legend=false)
-    p3 = plot(sol,vars=[9,10,11,12], xlabel="time", ylabel="people", linewidth=3, legend=false)
-    p4 = plot(sol,vars=[2,6,10], xlabel="", linewidth=3, labels=["i1" "i2" "i3"], legend=true)
-    p5 = plot(sol,vars=[3,7,11], xlabel="", linewidth=3,title="Populations", labels=["e1" "e2" "e3"], legend=true)
-    p6 = plot(sol,vars=[4,8,12], xlabel="time", linewidth=3, labels=["r1" "r2" "r3"], legend=true)
-    p = plot(p1, p5, p2, p4, p3, p6, layout=(3,2), linewidth=3, link=:both)
+    p1 = plot(
+        sol,
+        vars = [1, 2, 3, 4],
+        xlabel = "",
+        ylabel = "people",
+        linewidth = 3,
+        title = "Cities",
+        legend = false,
+    )
+    p2 = plot(
+        sol,
+        vars = [5, 6, 7, 8],
+        xlabel = "",
+        ylabel = "people",
+        linewidth = 3,
+        legend = false,
+    )
+    p3 = plot(
+        sol,
+        vars = [9, 10, 11, 12],
+        xlabel = "time",
+        ylabel = "people",
+        linewidth = 3,
+        legend = false,
+    )
+    p4 = plot(
+        sol,
+        vars = [2, 6, 10],
+        xlabel = "",
+        linewidth = 3,
+        labels = ["i1" "i2" "i3"],
+        legend = true,
+    )
+    p5 = plot(
+        sol,
+        vars = [3, 7, 11],
+        xlabel = "",
+        linewidth = 3,
+        title = "Populations",
+        labels = ["e1" "e2" "e3"],
+        legend = true,
+    )
+    p6 = plot(
+        sol,
+        vars = [4, 8, 12],
+        xlabel = "time",
+        linewidth = 3,
+        labels = ["r1" "r2" "r3"],
+        legend = true,
+    )
+    p = plot(
+        p1,
+        p5,
+        p2,
+        p4,
+        p3,
+        p6,
+        layout = (3, 2),
+        linewidth = 3,
+        link = :both,
+    )
     savefig(p, "$(prefix)combined.pdf")
     p
 end
 
 function makeplots_seird(sol, prefix)
     mkpath(dirname(prefix))
-    p1 = plot(sol,vars=[1,2,3,4,5], xlabel="", ylabel="people", linewidth=3,title="Cities", legend=false)
-    p2 = plot(sol,vars=[6,7,8,9,10], xlabel="", ylabel="people", linewidth=3, legend=false)
-    p3 = plot(sol,vars=[11,12,13,14,15], xlabel="time", ylabel="people", linewidth=3, legend=false)
-    p4 = plot(sol,vars=[2,7,12], xlabel="", linewidth=3, labels=["i1" "i2" "i3"], legend=true)
-    p5 = plot(sol,vars=[3,8,13], xlabel="", linewidth=3,title="Populations", labels=["e1" "e2" "e3"], legend=true)
-    p6 = plot(sol,vars=[5,10,15], xlabel="time", linewidth=3, labels=["d1" "d2" "d3"], legend=true)
-    p = plot(p1, p5, p2, p4, p3, p6, layout=(3,2), linewidth=3, link=:both)
+    p1 = plot(
+        sol,
+        vars = [1, 2, 3, 4, 5],
+        xlabel = "",
+        ylabel = "people",
+        linewidth = 3,
+        title = "Cities",
+        legend = false,
+    )
+    p2 = plot(
+        sol,
+        vars = [6, 7, 8, 9, 10],
+        xlabel = "",
+        ylabel = "people",
+        linewidth = 3,
+        legend = false,
+    )
+    p3 = plot(
+        sol,
+        vars = [11, 12, 13, 14, 15],
+        xlabel = "time",
+        ylabel = "people",
+        linewidth = 3,
+        legend = false,
+    )
+    p4 = plot(
+        sol,
+        vars = [2, 7, 12],
+        xlabel = "",
+        linewidth = 3,
+        labels = ["i1" "i2" "i3"],
+        legend = true,
+    )
+    p5 = plot(
+        sol,
+        vars = [3, 8, 13],
+        xlabel = "",
+        linewidth = 3,
+        title = "Populations",
+        labels = ["e1" "e2" "e3"],
+        legend = true,
+    )
+    p6 = plot(
+        sol,
+        vars = [5, 10, 15],
+        xlabel = "time",
+        linewidth = 3,
+        labels = ["d1" "d2" "d3"],
+        legend = true,
+    )
+    p = plot(
+        p1,
+        p5,
+        p2,
+        p4,
+        p3,
+        p6,
+        layout = (3, 2),
+        linewidth = 3,
+        link = :both,
+    )
     savefig(p, "$(prefix)combined.pdf")
     p
 end
@@ -53,62 +161,63 @@ T = [
     # City 3 SEIR
     ([9, 10], [11, 10]),
     ([11], [10]), # E→I
-    ([10], [12]) # I→R
+    ([10], [12]), # I→R
 ]
 
 m = Petri.Model(1:12, T, missing, missing)
 nS = length(m.S)
 β = ones(Float64, length(T))
-@test fluxes(m)(zeros(Float64, nS), ones(Float64, nS), β, 1) |> length == length(m.S)
+@test fluxes(m)(zeros(Float64, nS), ones(Float64, nS), β, 1) |> length ==
+      length(m.S)
 
-tspan = (0.0,60.0)
-prob = ODEProblem(fluxes(m), u₀(m, 1,0), tspan, β)
-sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
-@test sol.u[end][end-3] > .90
+tspan = (0.0, 60.0)
+prob = ODEProblem(fluxes(m), u₀(m, 1, 0), tspan, β)
+sol = OrdinaryDiffEq.solve(prob, Tsit5(), reltol = 1e-8, abstol = 1e-8)
+@test sol.u[end][end-3] > 0.90
 @test sol.u[end][end-2] == 0
 @test sol.u[end][end-1] == 0
 @test sol.u[end][end] == 0
 
 
 u0 = zeros(Float64, length(m.S))
-u0[1]  = 10000
-u0[5]  = 10000
-u0[9]  = 10000
-u0[2]  = 1
+u0[1] = 10000
+u0[5] = 10000
+u0[9] = 10000
+u0[2] = 1
 u0
-βseir = [10/sum(u0), 1/2, 1/5]
-βtravel = [1/2, 1/2, 1/2]/1000
+βseir = [10 / sum(u0), 1 / 2, 1 / 5]
+βtravel = [1 / 2, 1 / 2, 1 / 2] / 1000
 β = vcat(βseir, βtravel, βseir, βtravel, βseir)
 @show β
 prob = ODEProblem(fluxes(m), u0, tspan, β)
-sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
+sol = OrdinaryDiffEq.solve(prob, Tsit5(), reltol = 1e-8, abstol = 1e-8)
 @show sol.u[end]
 
 using Plots
 makeplots_seir(sol, "img/seir/baseline")
 
 
-βseir = [10/sum(u0), 1/2, 1/5]
-βtravel = [1/2, 1/2, 1/2]/100
+βseir = [10 / sum(u0), 1 / 2, 1 / 5]
+βtravel = [1 / 2, 1 / 2, 1 / 2] / 100
 β = vcat(βseir, βtravel, βseir, βtravel, βseir)
 prob = ODEProblem(fluxes(m), u0, tspan, β)
-sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
+sol = OrdinaryDiffEq.solve(prob, Tsit5(), reltol = 1e-8, abstol = 1e-8)
 @show sol.u[end]
 makeplots_seir(sol, "img/seir/travel")
 
-βseir = [10/sum(u0), 1/2, 1/5]
-βtravel = [1/2, 1/200, 1/2]/100
+βseir = [10 / sum(u0), 1 / 2, 1 / 5]
+βtravel = [1 / 2, 1 / 200, 1 / 2] / 100
 β = vcat(βseir, βtravel, βseir, βtravel, βseir)
 prob = ODEProblem(fluxes(m), u0, tspan, β)
-sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
+sol = OrdinaryDiffEq.solve(prob, Tsit5(), reltol = 1e-8, abstol = 1e-8)
 @show sol.u[end]
 makeplots_seir(sol, "img/seir/screening")
 
-βseir = [10/sum(u0), 1/2, 1/5]
-βtravel = [1/200, 1/200, 1/200]/100000
+βseir = [10 / sum(u0), 1 / 2, 1 / 5]
+βtravel = [1 / 200, 1 / 200, 1 / 200] / 100000
 β = vcat(βseir, βtravel, βseir, βtravel, βseir)
 prob = ODEProblem(fluxes(m), u0, tspan, β)
-sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
+sol = OrdinaryDiffEq.solve(prob, Tsit5(), reltol = 1e-8, abstol = 1e-8)
 @show sol.u[end]
 makeplots_seir(sol, "img/seir/shutdown")
 
@@ -116,37 +225,39 @@ makeplots_seir(sol, "img/seir/shutdown")
 println("Exploring the SEIRD^3 example")
 
 S = 1:15
-T = [([1, 2], [3, 2]),
-     ([3], [2]),
-     ([2], [4]),
-     ([2], [5]),
-     ([1], [6]),
-     ([2], [7]),
-     ([3], [8]),
-     ([6, 7], [8, 7]),
-     ([8], [7]),
-     ([7], [9]),
-     ([7], [10]),
-     ([6], [11]),
-     ([7], [12]),
-     ([8], [13]),
-     ([11, 12], [13, 12]),
-     ([13], [12]),
-     ([12], [14]),
-     ([12], [15])]
+T = [
+    ([1, 2], [3, 2]),
+    ([3], [2]),
+    ([2], [4]),
+    ([2], [5]),
+    ([1], [6]),
+    ([2], [7]),
+    ([3], [8]),
+    ([6, 7], [8, 7]),
+    ([8], [7]),
+    ([7], [9]),
+    ([7], [10]),
+    ([6], [11]),
+    ([7], [12]),
+    ([8], [13]),
+    ([11, 12], [13, 12]),
+    ([13], [12]),
+    ([12], [14]),
+    ([12], [15]),
+]
 m = Petri.Model(S, T, missing, missing)
 u0 = zeros(Float64, length(m.S))
-u0[1]  = 10000
-u0[6]  = 10000
-u0[11]  = 10000
-u0[2]  = 1
+u0[1] = 10000
+u0[6] = 10000
+u0[11] = 10000
+u0[2] = 1
 u0
-βseir = [10/sum(u0), 1/2, 1/5, 1/10]
-βtravel = [1/2, 1/2, 1/2]/1000
+βseir = [10 / sum(u0), 1 / 2, 1 / 5, 1 / 10]
+βtravel = [1 / 2, 1 / 2, 1 / 2] / 1000
 β = vcat(βseir, βtravel, βseir, βtravel, βseir)
 @show β
 prob = ODEProblem(fluxes(m), u0, tspan, β)
-sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
+sol = OrdinaryDiffEq.solve(prob, Tsit5(), reltol = 1e-8, abstol = 1e-8)
 @show sol.u[end]
 makeplots_seird(sol, "img/seird/baseline")
 
@@ -154,7 +265,7 @@ makeplots_seird(sol, "img/seird/baseline")
 function paramsweep(f::Function, m::Petri.Model, initials, tspan, params)
     map(params) do p
         prob = ODEProblem(fluxes(m), initials, tspan, p)
-        sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
+        sol = OrdinaryDiffEq.solve(prob, Tsit5(), reltol = 1e-8, abstol = 1e-8)
         return f(sol)
     end
 end
@@ -173,24 +284,24 @@ packparams(βlocal, βflow) = vcat(βlocal, βflow, βlocal, βflow, βlocal)
 
 # Baseline scenario
 
-βseir = [10/sum(u0), 1/2, 1/5]
-βtravel = [1/2, 1/2, 1/2]/100
+βseir = [10 / sum(u0), 1 / 2, 1 / 5]
+βtravel = [1 / 2, 1 / 2, 1 / 2] / 100
 β1 = packparams(βseir, βtravel)
 
 # Travel scenario
-βtravel = [1/2, 1/2, 1/2]/10
+βtravel = [1 / 2, 1 / 2, 1 / 2] / 10
 β2 = packparams(βseir, βtravel)
 
 # Screening scenario
-βtravel = [1/2, 1/20, 1/2]/100
+βtravel = [1 / 2, 1 / 20, 1 / 2] / 100
 β3 = packparams(βseir, βtravel)
 
 # Shutdown scenario
-βtravel = [1/2, 1/2, 1/2]/1000
+βtravel = [1 / 2, 1 / 2, 1 / 2] / 1000
 β4 = packparams(βseir, βtravel)
 
 # Total and Complete Shutdown scenario
-βtravel = [1/2, 1/2, 1/2]/10000
+βtravel = [1 / 2, 1 / 2, 1 / 2] / 10000
 
 β5 = packparams(βseir, βtravel)
 βs = [β1, β2, β3, β4, β5]
@@ -215,29 +326,29 @@ T = [
     # City 3 SEIR
     ([9, 10], [11, 10]),
     ([11], [10]), # E→I
-    ([10], [12]) # I→R
+    ([10], [12]), # I→R
 ]
 
 # u0 is the initial configuration of the system
 # u0[[1,5,9]] = number of initially Susceptible people in each population
 # u0[2] = number of Infected individuals
 u0 = zeros(Float64, length(m.S))
-u0[1]  = 10000
-u0[5]  = 10000
-u0[9]  = 10000
-u0[2]  = 1
+u0[1] = 10000
+u0[5] = 10000
+u0[9] = 10000
+u0[2] = 1
 u0
 
 m = Petri.Model(1:12, T, missing, missing)
-gaps = paramsweep(sol->peakgap(sol, 2, 10), m, u0, tspan, βs)
+gaps = paramsweep(sol -> peakgap(sol, 2, 10), m, u0, tspan, βs)
 
 # prob = ODEProblem(fluxes(m), u0, tspan, βs[1])
 # sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
 # makeplots_seir(sol, "img/debug_1")
 
 travelparams(k::Number) = begin
-    βseir = [10/sum(u0), 1/2, 1/5]
-    βtravel = [1/2, 1/2, 1/2]/(100k)
+    βseir = [10 / sum(u0), 1 / 2, 1 / 5]
+    βtravel = [1 / 2, 1 / 2, 1 / 2] / (100k)
     β = packparams(βseir, βtravel)
     return β
 end
@@ -248,11 +359,12 @@ end
 
 
 βrange = 1:8
-gaps = paramsweep(sol->peakgap(sol, 2, 10), m, u0, tspan, travelsweep(βrange))
+gaps = paramsweep(sol -> peakgap(sol, 2, 10), m, u0, tspan, travelsweep(βrange))
 
 
 coeffs = linreg(βrange, gaps)
-@test sum(abs.((coeffs[1] .+ (coeffs[2]*(βrange))) .- gaps))/length(βrange)<= 1e-1
+@test sum(abs.((coeffs[1] .+ (coeffs[2] * (βrange))) .- gaps)) /
+      length(βrange) <= 1e-1
 
 # struct GapResult{P,G}
 #     param::P
@@ -269,15 +381,15 @@ coeffs = linreg(βrange, gaps)
 # slope(gs::GapStudy) = gs.coeffs[end]
 
 function estimatedelay(r::AbstractVector)
-    gaps = paramsweep(sol->peakgap(sol, 2, 10), m, u0, tspan, travelsweep(r))
+    gaps = paramsweep(sol -> peakgap(sol, 2, 10), m, u0, tspan, travelsweep(r))
     coeffs = linreg(βrange, gaps)
-    return (results=zip(r, gaps), coeffs=coeffs)
+    return (results = zip(r, gaps), coeffs = coeffs)
 end
 
 function estimatedelay(m::Petri.Model, u0, tspan, parameters)
-    gaps = paramsweep(sol->peakgap(sol, 2, 10), m, u0, tspan, parameters)
+    gaps = paramsweep(sol -> peakgap(sol, 2, 10), m, u0, tspan, parameters)
     coeffs = linreg(βrange, gaps)
-    return (results=zip(parameters, gaps), coeffs=coeffs)
+    return (results = zip(parameters, gaps), coeffs = coeffs)
 end
 
 slope(gs) = gs.coeffs[end]
@@ -293,22 +405,28 @@ using Catlab.Doctrines
 using Catlab.Graphics
 using Catlab.WiringDiagrams
 using Catlab.Programs
-using SemanticModels.ModelTools.CategoryTheory
-import SemanticModels.ModelTools.CategoryTheory: undecorate, ⊔
-using SemanticModels.ModelTools.PetriModels
-using SemanticModels.ModelTools.PetriCospans
-import SemanticModels.ModelTools: model
+using SemanticModels.CategoryTheory
+import SemanticModels.CategoryTheory: undecorate, ⊔
+using SemanticModels.PetriModels
+using SemanticModels.PetriCospans
+import SemanticModels: model
 
 model(c::PetriCospan) = left(c.f).d[1].model
 
 X = FinSet(1)
-Fseir = compose(exposure(X,X,X),otimes(spontaneous(X,X),id(X)),mmerge(X),mcopy(X),otimes(id(X),spontaneous(X,X)))
+Fseir = compose(
+    exposure(X, X, X),
+    otimes(spontaneous(X, X), id(X)),
+    mmerge(X),
+    mcopy(X),
+    otimes(id(X), spontaneous(X, X)),
+)
 # states are [S, I, E, R]
 seir_petri = left(Fseir.f).d[1]
 f = FinSetMorph(1:4, [1, 2, 3])
 g = FinSetMorph(1:4, [1, 2, 3])
-Fseir′ = PetriCospan(Cospan(Decorated(f,seir_petri), Decorated(g, seir_petri)))
-s = spontaneous(X,X)
+Fseir′ = PetriCospan(Cospan(Decorated(f, seir_petri), Decorated(g, seir_petri)))
+s = spontaneous(X, X)
 Fflow = otimes(s, s, s)
 @test length(model(Fseir′).S) == 4
 @test length(model(Fseir′).Δ) == 3
@@ -316,53 +434,62 @@ Fflow = otimes(s, s, s)
 m = model(Fseir′ ⋅ Fflow ⋅ Fseir′ ⋅ Fflow ⋅ Fseir′)
 
 u0 = zeros(Float64, length(m.S))
-u0[1]  = 10000
-u0[5]  = 10000
-u0[9]  = 10000
-u0[2]  = 1
+u0[1] = 10000
+u0[5] = 10000
+u0[9] = 10000
+u0[2] = 1
 res = estimatedelay(m::Petri.Model, u0, tspan, travelsweep(1:8))
 seirgaps = collect(map(last, res.results))
 
 @test 1.35 <= slope(res) <= 1.45
 
 
-Pseird = PetriModel(
-          Petri.Model(1:5,[
-            ([1,2],[3,2]), # exposure
-            ([3],[2]),     # onset
-            ([2],[4]),     # recovery
-            ([2],[5]),     # death
-            ], missing, missing))
-inputs = FinSetMorph(1:5, [1,2,3])
-outputs = FinSetMorph(1:5, [1,2,3])
-Fcityd = PetriCospan(Cospan(Decorated(inputs, Pseird),
-                            Decorated(outputs, Pseird)))
-s = spontaneous(X,X)
+Pseird = PetriModel(Petri.Model(
+    1:5,
+    [
+        ([1, 2], [3, 2]), # exposure
+        ([3], [2]),     # onset
+        ([2], [4]),     # recovery
+        ([2], [5]),     # death
+    ],
+    missing,
+    missing,
+))
+inputs = FinSetMorph(1:5, [1, 2, 3])
+outputs = FinSetMorph(1:5, [1, 2, 3])
+Fcityd =
+    PetriCospan(Cospan(Decorated(inputs, Pseird), Decorated(outputs, Pseird)))
+s = spontaneous(X, X)
 Fflow = otimes(s, s, s)
 Fcity₀ = Fcityd ⋅ Fflow
 Fcity₁ = Fcityd ⋅ Fflow
 Fcityₑ = Fcityd
-Fcity³ = Fcity₀⋅Fcity₁⋅Fcityₑ
+Fcity³ = Fcity₀ ⋅ Fcity₁ ⋅ Fcityₑ
 
 m = model(Fcity³)
 
 u0 = zeros(Float64, length(m.S))
-u0[1]  = 10000
-u0[6]  = 10000
+u0[1] = 10000
+u0[6] = 10000
 u0[11] = 10000
-u0[2]  = 1
+u0[2] = 1
 seirdparams(k) = begin
-    βseird = [10/sum(u0), 1/2, 1/5, 1/16]
-    βtravel = [1/2, 1/2, 1/2]/(100k)
+    βseird = [10 / sum(u0), 1 / 2, 1 / 5, 1 / 16]
+    βtravel = [1 / 2, 1 / 2, 1 / 2] / (100k)
     β = vcat(βseird, βtravel)
     return vcat(β, β, β)
 end
 
-gaps = paramsweep(sol->peakgap(sol, 2, 12), m,
-                  u0, tspan, seirdparams.(2 .^ (1:8)))
+gaps = paramsweep(
+    sol -> peakgap(sol, 2, 12),
+    m,
+    u0,
+    tspan,
+    seirdparams.(2 .^ (1:8)),
+)
 
 prob = ODEProblem(fluxes(model(Fcity³)), u0, tspan, seirdparams(2))
-sol = OrdinaryDiffEq.solve(prob, alg=Tsit5())
+sol = OrdinaryDiffEq.solve(prob, alg = Tsit5())
 
 seirdgaps = gaps
 
@@ -371,6 +498,14 @@ seirdgaps = gaps
 
 makeplots_seird(sol, "tmp")
 
-gp = plot([seirgaps seirdgaps], marker=:square, labels=[:seir :seird], xlabel="2^x fold reduction in travel", ylabel="Gap between first and last epidemic", legend=:bottomright, title="Effect of model assumptions on travel restrictions")
+gp = plot(
+    [seirgaps seirdgaps],
+    marker = :square,
+    labels = [:seir :seird],
+    xlabel = "2^x fold reduction in travel",
+    ylabel = "Gap between first and last epidemic",
+    legend = :bottomright,
+    title = "Effect of model assumptions on travel restrictions",
+)
 savefig(gp, "gapplot.pdf")
 end
