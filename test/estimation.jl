@@ -1,4 +1,4 @@
-module TestODEModel
+# module TestODEModel
 using CovidModels
 using OrdinaryDiffEq
 import OrdinaryDiffEq: ODEProblem
@@ -80,4 +80,45 @@ sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
 @show sol.u[end]
 
 using Plots
-makeplots_seir(sol, "img/seir/baseline")
+makeplots_seir(sol, "img/estimation/seir")
+
+
+
+T = [
+    # City 1 SEIₐIRD
+    ([1, 2], [3, 2]), # S+Iₐ → E+Iₐ
+    ([3], [2]),       # E  → Iₐ
+    ([2], [4]),       # Iₐ → I
+    ([2], [5]),       # Iₐ → R
+    ([4], [5]),       # I  → R
+    ([4], [6]),       # I  → D
+]
+
+m = Petri.Model(1:6, T, missing, missing)
+nS = length(m.S)
+β = ones(Float64, length(T))
+
+tspan = (0.0,60.0)
+prob = ODEProblem(fluxes(m), u₀(m, 1,0), tspan, β)
+sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
+
+
+u0 = zeros(Float64, length(m.S))
+u0[1]  = 10000
+u0[2]  = 1
+u0
+
+βseir = [10/sum(u0), 1/2, 1/5, 1/3, 1/4, 1/7]
+# βtravel = [1/2, 1/2, 1/2]/1000
+# β = vcat(βseir, βtravel, βseir, βtravel, βseir)
+β = βseir
+@show β
+prob = ODEProblem(fluxes(m), u0, tspan, β)
+sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
+@show sol.u[end]
+
+using Plots
+# makeplots_seir(sol, "img/estimation/seiird")
+
+plot(sol, label=["S" "E" "IA" "I" "R" "D"])
+# end
