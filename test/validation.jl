@@ -7,7 +7,7 @@ using Petri
 using Test
 using SemanticModels.PetriModels
 
-
+mkpath("outputs")
 
 # states are [S, I, R]
 Psir = PetriModel(Petri.Model(1:3, [
@@ -28,7 +28,7 @@ tspan = (0, 100.0)
 prob = ODEProblem(fluxes(m), u0, tspan, β)
 sol = OrdinaryDiffEq.solve(prob, alg = Tsit5())
 
-savedata(sol, "S,I,R", "sirdata.csv")
+savedata(sol, "S,I,R", "outputs/sirdata.csv")
 
 # states are [S, I, R, D]
 Psird = PetriModel(Petri.Model(
@@ -55,7 +55,7 @@ tspan = (0, 100.0)
 prob = ODEProblem(fluxes(m), u0, tspan, β)
 sol = OrdinaryDiffEq.solve(prob, alg = Tsit5())
 
-savedata(sol, "S,I,R,D", "sirddata.csv")
+savedata(sol, "S,I,R,D", "outputs/sirddata.csv")
 
 # states are [S, I, E, R]
 Pseir = PetriModel(Petri.Model(
@@ -82,7 +82,7 @@ tspan = (0, 100.0)
 prob = ODEProblem(fluxes(m), u0, tspan, β)
 sol = OrdinaryDiffEq.solve(prob, alg = Tsit5())
 
-savedata(sol, "S,I,E,R", "seirdata.csv")
+savedata(sol, "S,I,E,R", "outputs/seirdata.csv")
 
 
 # states are [S, I, E, R, D]
@@ -113,5 +113,5 @@ tspan = (0, 100.0)
 prob = ODEProblem(fluxes(m), u0, tspan, seirdparams())
 sol = OrdinaryDiffEq.solve(prob, alg = Tsit5())
 
-savedata(sol, "S,I,E,R,D", "seirddata.csv")
+savedata(sol, "S,I,E,R,D", "outputs/seirddata.csv")
 end
