@@ -28,4 +28,10 @@ test/*.png
 test/*.svg
 test/*.csv
 
+
+test/img
+test/outputs
+
+.DS_Store
+
 /dev
