@@ -105,11 +105,11 @@ sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
 
 
 u0 = zeros(Float64, length(m.S))
-u0[1]  = 10000
+u0[1]  = 60000000
 u0[2]  = 1
 u0
 
-βseir = [10/sum(u0), 1/2, 1/5, 1/3, 1/4, 1/7]
+βseir = [10/5sum(u0), 1/2, 1/5, 1/3, 1/4, 1/7]
 # βtravel = [1/2, 1/2, 1/2]/1000
 # β = vcat(βseir, βtravel, βseir, βtravel, βseir)
 β = βseir
@@ -118,47 +118,21 @@ prob = ODEProblem(fluxes(m), u0, tspan, β)
 sol = OrdinaryDiffEq.solve(prob,Tsit5(),reltol=1e-8,abstol=1e-8)
 @show sol.u[end]
 
-using Plots
 # makeplots_seir(sol, "img/estimation/seiird")
 
-plot(sol, label=["S" "E" "IA" "I" "R" "D"])
+plot(sol, vars=[3, 4, 5, 6], label=["IA" "I" "R" "D"])
 # end
 
 using CSV
 using Query
 using DataFrames
 
-casesf = reformat(CSV.read("../time_series_covid19_confirmed_global.csv"), :Date, :Cases)
-deathf = reformat(CSV.read("../time_series_covid19_deaths_global.csv"), :Date, :Deaths)
-recovf = reformat(CSV.read("../time_series_covid19_recovered_global.csv"), :Date, :Recoveries)
+df = CSV.read("../eucovid.csv")
 
-
-chinaf = joindates(select_country.([casesf, deathf, recovf], "China")...)
-hubeif = joindates(select_province.([casesf, deathf, recovf], "China", "Hubei")...)
-
-parsedates!(hubeif)
-
-# cdf = @from i in casesf begin
-#     @join j in deathf on i.Date equals j.Date #and i.Province equals j.Province
-#     @where i.Province == j.Province  && i.Country == j.Country
-#     @select {i.Date,i.Cases,j.Deaths,j.Province, j.Country}
-#     @collect DataFrame
-# end
-
-caseplot(hubeif)
-
-df = @from i in joindates(casesf, deathf, recovf) begin
-  @where i.Cases != 0
-  @select i
-  @collect DataFrame
+italy = @from i in df begin
+    @where i.Country == "Italy" && i.Cases > 0
+    @select i
+    @collect DataFrame
 end
 
-CSV.write("covid.csv", df)
-
-
-italyf = joindates(select_country.([casesf, deathf, recovf], "Italy")...)
-francef = joindates(select_mainland.([casesf, deathf, recovf], "France")...)
-ukf = joindates(select_mainland.([casesf, deathf, recovf], "United Kingdom")...)
-euf = vcat(italyf, francef, ukf)
-
-CSV.write("eucovid.csv", euf)
+caseplot(italy)
