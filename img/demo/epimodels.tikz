@@ -1,0 +1,78 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style={variable_node}] (372) at (57, -29.25) {R};
+		\node [style={variable_node}] (373) at (57, -24) {I};
+		\node [style={variable_node}] (374) at (57, -18) {S};
+		\node [style={variable_node}] (375) at (60.25, -20.75) {E};
+		\node [style=block] (376) at (57, -20) {$\beta$};
+		\node [style=block] (377) at (60.25, -22.5) {$\gamma$};
+		\node [style=block] (378) at (57, -26.5) {$\mu$};
+		\node [style={variable_node}] (486) at (45, -29.5) {R};
+		\node [style={variable_node}] (487) at (45, -24.25) {I};
+		\node [style={variable_node}] (488) at (45, -18.25) {S};
+		\node [style=block] (490) at (45, -20.25) {$\beta$};
+		\node [style=block] (492) at (45, -26.75) {$\mu$};
+		\node [style=none] (493) at (46.25, -22.5) {2};
+		\node [style={variable_node}] (494) at (74.25, -20.5) {R};
+		\node [style={variable_node}] (495) at (74.25, -15.25) {I};
+		\node [style={variable_node}] (496) at (74.25, -9.25) {S};
+		\node [style={variable_node}] (497) at (77.5, -12) {E};
+		\node [style=block] (498) at (74.25, -11.25) {$\beta$};
+		\node [style=block] (499) at (77.5, -13.75) {$\gamma$};
+		\node [style=block] (500) at (74.25, -17.75) {$\mu$};
+		\node [style={variable_node}] (503) at (72.25, -36) {R};
+		\node [style={variable_node}] (504) at (72.25, -30.75) {I};
+		\node [style={variable_node}] (505) at (72.25, -24.75) {S};
+		\node [style={variable_node}] (506) at (75.5, -27.5) {E};
+		\node [style=block] (507) at (72.25, -26.75) {$\beta$};
+		\node [style=block] (508) at (75.5, -29.25) {$\gamma$};
+		\node [style=block] (509) at (72.25, -33.25) {$\mu$};
+		\node [style=block] (510) at (75.5, -33.25) {$\delta$};
+		\node [style={variable_node}] (511) at (75.5, -36) {D};
+		\node [style=none] (512) at (47.5, -21.5) {};
+		\node [style=none] (513) at (62, -19) {};
+		\node [style=none] (514) at (70.25, -14) {};
+		\node [style=none] (515) at (62, -23.5) {};
+		\node [style=none] (516) at (70.5, -28) {};
+		\node [style=none] (517) at (55.75, -21.5) {};
+		\node [style=block] (518) at (72, -12.25) {$\omega$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=new edge style 0] (374) to (376);
+		\draw [style=new edge style 0] (376) to (375);
+		\draw [style=new edge style 0] (375) to (377);
+		\draw [style=new edge style 0] (377) to (373);
+		\draw [style=new edge style 0] (373) to (378);
+		\draw [style=new edge style 0] (378) to (372);
+		\draw [style=new edge style 0, bend left=330] (373) to (376);
+		\draw [style=new edge style 0, bend right=15] (376) to (373);
+		\draw [style=new edge style 0] (488) to (490);
+		\draw [style=new edge style 0] (487) to (492);
+		\draw [style=new edge style 0] (492) to (486);
+		\draw [style=new edge style 0, bend left=330] (487) to (490);
+		\draw [style=new edge style 0, bend right=15] (490) to (487);
+		\draw [style=new edge style 0] (496) to (498);
+		\draw [style=new edge style 0] (498) to (497);
+		\draw [style=new edge style 0] (497) to (499);
+		\draw [style=new edge style 0] (499) to (495);
+		\draw [style=new edge style 0] (495) to (500);
+		\draw [style=new edge style 0] (500) to (494);
+		\draw [style=new edge style 0, bend left=330] (495) to (498);
+		\draw [style=new edge style 0, bend right=15] (498) to (495);
+		\draw [style=new edge style 0] (505) to (507);
+		\draw [style=new edge style 0] (507) to (506);
+		\draw [style=new edge style 0] (506) to (508);
+		\draw [style=new edge style 0] (508) to (504);
+		\draw [style=new edge style 0] (504) to (509);
+		\draw [style=new edge style 0] (509) to (503);
+		\draw [style=new edge style 0, bend left=330] (504) to (507);
+		\draw [style=new edge style 0, bend right=15] (507) to (504);
+		\draw [style=new edge style 0] (510) to (511);
+		\draw [style=new edge style 0] (504) to (510);
+		\draw [style={cospan_edge}] (512.center) to (517.center);
+		\draw [style={cospan_edge}] (513.center) to (514.center);
+		\draw [style={cospan_edge}] (515.center) to (516.center);
+		\draw [style=new edge style 0] (495) to (518);
+		\draw [style=new edge style 0] (518) to (496);
+	\end{pgfonlayer}
+\end{tikzpicture}
