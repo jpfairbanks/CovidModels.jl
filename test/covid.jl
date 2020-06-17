@@ -221,8 +221,6 @@ Pseird = PetriModel(Petri.Model(
         ([2], [4]),     # recovery
         ([2], [5]),     # death
     ],
-    missing,
-    missing,
 ))
 inputs = FinSetMorph(1:5, [1, 2, 3])
 outputs = FinSetMorph(1:5, [1, 2, 3])
