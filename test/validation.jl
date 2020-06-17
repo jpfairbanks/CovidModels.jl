@@ -13,7 +13,7 @@ mkpath("outputs")
 Psir = PetriModel(Petri.Model(1:3, [
   ([1, 2], [2, 2]), # exposure
   ([2], [3]),     # recovery
-], missing, missing))
+]))
 
 m = Psir.model
 
@@ -37,9 +37,7 @@ Psird = PetriModel(Petri.Model(
     ([1, 2], [2, 2]), # exposure
     ([2], [3]),     # recovery
     ([2], [4]),     # death
-  ],
-  missing,
-  missing,
+  ]
 ))
 
 m = Psird.model
@@ -65,8 +63,6 @@ Pseir = PetriModel(Petri.Model(
     ([3], [2]),     # onset
     ([2], [4]),     # recovery
   ],
-  missing,
-  missing,
 ))
 
 m = Pseir.model
@@ -94,8 +90,6 @@ Pseird = PetriModel(Petri.Model(
     ([2], [4]),     # recovery
     ([2], [5]),     # death
   ],
-  missing,
-  missing,
 ))
 
 m = Pseird.model

@@ -164,7 +164,7 @@ T = [
     ([10], [12]), # I→R
 ]
 
-m = Petri.Model(1:12, T, missing, missing)
+m = Petri.Model(1:12, T)
 nS = length(m.S)
 β = ones(Float64, length(T))
 @test fluxes(m)(zeros(Float64, nS), ones(Float64, nS), β, 1) |> length ==
@@ -245,7 +245,7 @@ T = [
     ([12], [14]),
     ([12], [15]),
 ]
-m = Petri.Model(S, T, missing, missing)
+m = Petri.Model(S, T)
 u0 = zeros(Float64, length(m.S))
 u0[1] = 10000
 u0[6] = 10000
@@ -339,7 +339,7 @@ u0[9] = 10000
 u0[2] = 1
 u0
 
-m = Petri.Model(1:12, T, missing, missing)
+m = Petri.Model(1:12, T)
 gaps = paramsweep(sol -> peakgap(sol, 2, 10), m, u0, tspan, βs)
 
 # prob = ODEProblem(fluxes(m), u0, tspan, βs[1])
@@ -452,8 +452,6 @@ Pseird = PetriModel(Petri.Model(
         ([2], [4]),     # recovery
         ([2], [5]),     # death
     ],
-    missing,
-    missing,
 ))
 inputs = FinSetMorph(1:5, [1, 2, 3])
 outputs = FinSetMorph(1:5, [1, 2, 3])
