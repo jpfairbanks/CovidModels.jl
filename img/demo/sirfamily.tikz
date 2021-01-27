@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Ob] (0) at (-1, 0) {SIR};
+		\node [style=Ob] (1) at (3, 0) {};
+		\node [style=Ob] (2) at (3, 0) {};
+		\node [style=Ob] (3) at (3, 0) {SEIR};
+		\node [style=Ob] (4) at (7, 1.25) {SEIRS};
+		\node [style=Ob] (5) at (7, -1.75) {SEIRD};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=arrow] (0) to (3);
+		\draw [style=arrow] (3) to (4);
+		\draw [style=arrow] (3) to (5);
+	\end{pgfonlayer}
+\end{tikzpicture}
